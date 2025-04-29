@@ -37,6 +37,5 @@ jobs:
       feedName: https://pkgs.dev.azure.com/YourOrg/_packaging/YourFeed/nuget/v3/index.json
       skipDuplicate: false
 
-    secrets:
-      apiKey: ${{ secrets.AZURE_DEVOPS_PAT }}
+  
 
