@@ -6,7 +6,7 @@ on:
 
 jobs:
   call-reusable-nuget:
-    uses: kirandevops1993/NUGET-Reusable-/.github/workflows/nugetreusable.yml@main
+    uses: kirandevops1993/NUGET-Reusable/.github/workflows/nugetreusable.yml@main
     with:
       # Restore Inputs
       solution: OrchardCore.sln
