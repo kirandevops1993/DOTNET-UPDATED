@@ -1,41 +1,57 @@
-name: Main NuGet Workflow
+name: Main Workflow
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  call-reusable-nuget:
-    uses: kirandevops1993/NUGET-Reusable/.github/workflows/nugetreusable.yml@main
+  dotnet-tasks:
+    strategy:
+      matrix:
+        task:
+          - command: restore
+            projects: '**/*.csproj'
+            nugetConfigPath: 'NuGet.config'
+
+          - command: build
+            projects: '**/*.csproj'
+            arguments: '--configuration Release'
+
+          - command: test
+            projects: '**/*.csproj'
+            arguments: '--collect "Code coverage"'
+
+          - command: pack
+            packagesToPack: '**/*.csproj'
+            configuration: 'Release'
+
+    uses: kirandevops1993/.NET-REUSBALE/.github/workflows/reusable.yml@main
     with:
-      # Restore Inputs
-      solution: OrchardCore.sln
-      nugetConfigPath: ./NuGet.config
-      packagesDirectory: ./packages
-      verbosity: detailed
-      nuGetRestoreArgs: ""
-      restoreMode: restore
-      noCache: true
-      nuGetVersion: 6.13.2
-      nuGetPath: ./nuget.exe
-
-      # Packager Inputs
-      searchPattern: src/docs/OrchardCore.Docs.csproj
-      outputdir: ./nupkgs
-      includeSymbols: true
-      versionByBuild: false
-      versionEnvVar: ""
-      majorVersion: 1
-      minorVersion: 0
-      patchVersion: 0
-      configurationToPack: Release
-      buildProperties: Platform="Any CPU"
-      nuGetAdditionalArgs: ""
-
-      # Publisher Inputs
-      nuGetFeedType: internal
-      feedName: https://pkgs.dev.azure.com/YourOrg/_packaging/YourFeed/nuget/v3/index.json
-      skipDuplicate: false
-
-  
-
+      command: restore
+      projects: '**/*.csproj'
+      arguments: '--configuration Release'
+      nugetConfigPath: 'NuGet.config'
+      packagesToPack: '**/*.csproj'
+      configuration: 'Release'
+      custom: 'true'
+      restoreArguments: '--interactive'
+      testRunTitle: 'CI Test Run'
+      modifyOutputPath: 'true'
+      packDirectory: './custom_pack'
+      nobuild: 'true'
+      includesymbols: 'true'
+      includesource: 'true'
+      requestTimeout: '180'
+      noCache: 'true'
+      restoreDirectory: './restoredir'
+      verbosityRestore: 'minimal'
+      publishPackageMetadata: 'true'
+      versioningScheme: '1.0.0'
+      versionEnvVar: 'BUILD_VERSION'
+      majorVersion: '1'
+      minorVersion: '0'
+      patchVersion: '3'
+      buildProperties: 'CommitId=abc123'
+      verbosityPack: 'detailed'
+      workingDirectory: './src'
