@@ -1,10 +1,8 @@
 name: Main Workflow
-
 on:
   push:
     branches:
       - main
-
 jobs:
   dotnet-tasks:
     strategy:
@@ -28,12 +26,12 @@ jobs:
 
     uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
     with:
-      command: restore
-      projects: '**/*.csproj'
-      arguments: '--configuration Release'
-      nugetConfigPath: 'NuGet.config'
-      packagesToPack: '**/*.csproj'
-      configuration: 'Release'
+      command: ${{ matrix.task.command }}
+      projects: ${{ matrix.task.projects }}
+      arguments: ${{ matrix.task.arguments '' }}
+      nugetConfigPath: ${{ matrix.task.nugetConfigPath '' }}
+      packagesToPack: ${{ matrix.task.packagesToPack '' }}
+      configuration: ${{ matrix.task.configuration '' }}
       custom: 'true'
       restoreArguments: '--interactive'
       testRunTitle: 'CI Test Run'
@@ -46,7 +44,7 @@ jobs:
       noCache: 'true'
       restoreDirectory: './restoredir'
       verbosityRestore: 'minimal'
-      publishPackageMetadata: 'true'
+      sensitiveAlphanumericInfo1: 'true'
       versioningScheme: '1.0.0'
       versionEnvVar: 'BUILD_VERSION'
       majorVersion: '1'
