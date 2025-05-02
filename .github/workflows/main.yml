@@ -23,7 +23,6 @@ jobs:
           - command: pack
             packagesToPack: '**/*.csproj'
             configuration: 'Release'
-
     uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
     with:
       command: ${{ matrix.task.command }}
