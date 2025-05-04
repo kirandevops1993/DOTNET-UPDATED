@@ -1,46 +1,126 @@
 name: Main Workflow
+
 on:
   push:
     branches:
       - main
+
 jobs:
-  dotnet-tasks:
-    strategy:
-      matrix:
-        task:
-          - command: restore
-            projects: '**/*.csproj'
-            nugetConfigPath: 'NuGet.config'
-
-          - command: build
-            projects: '**/*.csproj'
-            arguments: '--configuration Release'
-
-          - command: test
-            projects: '**/*.csproj'
-            arguments: '--collect "Code coverage"'
-
-          - command: pack
-            packagesToPack: '**/*.csproj'
-            configuration: 'Release'
+  restore:
     uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
     with:
-      command: ${{ matrix.task.command }}
-      projects: ${{ matrix.task.projects }}
-      arguments: ${{ matrix.task.arguments '' }}
-      nugetConfigPath: ${{ matrix.task.nugetConfigPath '' }}
-      packagesToPack: ${{ matrix.task.packagesToPack '' }}
-      configuration: ${{ matrix.task.configuration '' }}
-      custom: 'true'
+      command: restore
+      projects: '**/*.csproj'
+      nugetConfigPath: 'NuGet.config'
+      arguments: ''
+      packagesToPack: ''
+      configuration: 'Release'
+      custom: true
+      restoreArguments: '--interactive'
+      testRunTitle: ''
+      modifyOutputPath: true
+      packDirectory: './custom_pack'
+      nobuild: true
+      includesymbols: true
+      includesource: true
+      requestTimeout: '180'
+      noCache: true
+      restoreDirectory: './restoredir'
+      verbosityRestore: 'minimal'
+      sensitiveAlphanumericInfo1: 'true'
+      versioningScheme: '1.0.0'
+      versionEnvVar: 'BUILD_VERSION'
+      majorVersion: '1'
+      minorVersion: '0'
+      patchVersion: '3'
+      buildProperties: 'CommitId=abc123'
+      verbosityPack: 'detailed'
+      workingDirectory: './src'
+
+  build:
+    uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
+    needs: restore
+    with:
+      command: build
+      projects: '**/*.csproj'
+      nugetConfigPath: 'NuGet.config'
+      arguments: '--configuration Release'
+      packagesToPack: ''
+      configuration: 'Release'
+      custom: true
+      restoreArguments: '--interactive'
+      testRunTitle: ''
+      modifyOutputPath: true
+      packDirectory: './custom_pack'
+      nobuild: true
+      includesymbols: true
+      includesource: true
+      requestTimeout: '180'
+      noCache: true
+      restoreDirectory: './restoredir'
+      verbosityRestore: 'minimal'
+      sensitiveAlphanumericInfo1: 'true'
+      versioningScheme: '1.0.0'
+      versionEnvVar: 'BUILD_VERSION'
+      majorVersion: '1'
+      minorVersion: '0'
+      patchVersion: '3'
+      buildProperties: 'CommitId=abc123'
+      verbosityPack: 'detailed'
+      workingDirectory: './src'
+
+  test:
+    uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
+    needs: build
+    with:
+      command: test
+      projects: '**/*.csproj'
+      nugetConfigPath: 'NuGet.config'
+      arguments: '--collect "Code coverage"'
+      packagesToPack: ''
+      configuration: 'Release'
+      custom: true
       restoreArguments: '--interactive'
       testRunTitle: 'CI Test Run'
-      modifyOutputPath: 'true'
+      modifyOutputPath: true
       packDirectory: './custom_pack'
-      nobuild: 'true'
-      includesymbols: 'true'
-      includesource: 'true'
+      nobuild: true
+      includesymbols: true
+      includesource: true
       requestTimeout: '180'
-      noCache: 'true'
+      noCache: true
+      restoreDirectory: './restoredir'
+      verbosityRestore: 'minimal'
+      sensitiveAlphanumericInfo1: 'true'
+      versioningScheme: '1.0.0'
+      versionEnvVar: 'BUILD_VERSION'
+      majorVersion: '1'
+      minorVersion: '0'
+      patchVersion: '3'
+      buildProperties: 'CommitId=abc123'
+      verbosityPack: 'detailed'
+      workingDirectory: './src'
+
+  pack:
+    uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
+    needs: test
+    with:
+      command: pack
+      projects: ''
+      nugetConfigPath: 'NuGet.config'
+      arguments: ''
+      packagesToPack: '**/*.csproj'
+      configuration: 'Release'
+      custom: true
+      restoreArguments: '--interactive'
+      testRunTitle: ''
+      modifyOutputPath: true
+      packDirectory: './custom_pack'
+      nobuild: true
+      includesymbols: true
+      includesource: true
+      requestTimeout: '180'
+      noCache: true
       restoreDirectory: './restoredir'
       verbosityRestore: 'minimal'
       sensitiveAlphanumericInfo1: 'true'
