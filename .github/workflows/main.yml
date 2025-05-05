@@ -7,7 +7,7 @@ on:
 
 jobs:
   restore:
-    uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
+    uses: kirandevops1993/NUGET-REUSABLE-/.github/workflows/nuget-reusable.yml@main
     with:
       command: restore
       projects: '**/*.csproj'
@@ -38,7 +38,7 @@ jobs:
       workingDirectory: './src'
 
   build:
-    uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
+    uses: kirandevops1993/NUGET-REUSABLE-/.github/workflows/nuget-reusable.yml@main
     needs: restore
     with:
       command: build
@@ -70,7 +70,7 @@ jobs:
       workingDirectory: './src'
 
   test:
-    uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
+    uses: kirandevops1993/NUGET-REUSABLE-/.github/workflows/nuget-reusable.yml@main
     needs: build
     with:
       command: test
@@ -82,38 +82,6 @@ jobs:
       custom: true
       restoreArguments: '--interactive'
       testRunTitle: 'CI Test Run'
-      modifyOutputPath: true
-      packDirectory: './custom_pack'
-      nobuild: true
-      includesymbols: true
-      includesource: true
-      requestTimeout: '180'
-      noCache: true
-      restoreDirectory: './restoredir'
-      verbosityRestore: 'minimal'
-      sensitiveAlphanumericInfo1: 'true'
-      versioningScheme: '1.0.0'
-      versionEnvVar: 'BUILD_VERSION'
-      majorVersion: '1'
-      minorVersion: '0'
-      patchVersion: '3'
-      buildProperties: 'CommitId=abc123'
-      verbosityPack: 'detailed'
-      workingDirectory: './src'
-
-  pack:
-    uses: kirandevops1993/DOTNET-UPDATED-REUSABLE/.github/workflows/reusable.yml@main
-    needs: test
-    with:
-      command: pack
-      projects: ''
-      nugetConfigPath: 'NuGet.config'
-      arguments: ''
-      packagesToPack: '**/*.csproj'
-      configuration: 'Release'
-      custom: true
-      restoreArguments: '--interactive'
-      testRunTitle: ''
       modifyOutputPath: true
       packDirectory: './custom_pack'
       nobuild: true
